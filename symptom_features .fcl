@@ -1,0 +1,65 @@
+FUNCTION_BLOCK symptom_features
+
+VAR_INPUT
+Temperature : REAL;
+Cough_Level : REAL;
+Headache_Level : REAL;
+Fatigue_Level : REAL;
+Throat_Pain : REAL;
+END_VAR
+
+VAR_OUTPUT
+Diagnosis : REAL;
+END_VAR
+
+// =========================
+//TEMPERATURE
+ //=========================
+FUZZIFY Temperature
+TERM Low := (0,1) (4,0);
+TERM Medium := (3,0) (5,1) (7,0);
+TERM High := (6,0) (10,1);
+END_FUZZIFY
+
+
+//=========================
+//COUGH
+// =========================
+FUZZIFY Cough_Level
+TERM Low := (0,1) (4,0);
+TERM Medium := (3,0) (5,1) (7,0);
+TERM High := (6,0) (10,1);
+END_FUZZIFY
+
+
+//=========================
+//HEADACHE
+// =========================
+FUZZIFY Headache_Level
+TERM Low := (0,1) (4,0);
+TERM Medium := (3,0) (5,1) (7,0);
+TERM High := (6,0) (10,1);
+END_FUZZIFY
+
+
+// =========================
+// FATIGUE
+//=========================
+FUZZIFY Fatigue_Level
+TERM Low := (0,1) (4,0);
+TERM Medium := (3,0) (5,1) (7,0);
+TERM High := (6,0) (10,1);
+END_FUZZIFY
+
+
+//=========================
+//THROAT PAIN
+//=========================
+FUZZIFY Throat_Pain
+TERM None := (0,1) (2,0);
+TERM Mild := (2,0) (5,1) (7,0);
+TERM Severe := (6,0) (10,1);
+END_FUZZIFY
+
+
+END_FUNCTION_BLOCK

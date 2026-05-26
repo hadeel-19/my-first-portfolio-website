@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Coffee Recommendation System</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff3d6,#d6a77a);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:25px}
+.container{width:100%;max-width:900px;background:rgba(255,255,255,.92);border-radius:30px;padding:30px;box-shadow:0 20px 50px #0003;text-align:center}
+h1{color:#4b2c20}.grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:25px}.box{background:white;border-radius:25px;padding:25px;box-shadow:0 10px 25px #0001}
+label{display:block;text-align:left;font-weight:bold;margin-top:15px;color:#4b2c20}select{width:100%;padding:13px;margin-top:8px;border-radius:14px;border:1px solid #ccc;font-size:16px}
+.result{background:#24140f;color:white}.coffee{font-size:95px;animation:float 3s infinite ease-in-out}@keyframes float{50%{transform:translateY(-10px)}}.coffeeName{color:#ffcf70;font-size:42px}
+.details{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.detail{background:rgba(255,255,255,.12);padding:12px;border-radius:14px}
+table{width:100%;border-collapse:collapse;margin-top:25px;background:white;border-radius:18px;overflow:hidden}th,td{padding:12px;border-bottom:1px solid #eee;text-align:left}th{background:#4b2c20;color:white}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>☕ Coffee Recommendation System</h1>
+<p>Choose your mood, time, and coffee type. The system recommends coffee using CBR.</p>
+<div class="grid">
+<div class="box">
+<h2>Choose Details</h2>
+<label>Mood</label><select id="mood" onchange="recommend()"><option>Tired</option><option>Stress</option><option>Happy</option><option>Sleepy</option></select>
+<label>Time</label><select id="time" onchange="recommend()"><option>Morning</option><option>Mid-day</option><option>Evening</option></select>
+<label>Coffee Type</label><select id="type" onchange="recommend()"><option>Strong</option><option>Light</option></select>
+</div>
+<div class="box result">
+<h2>Recommended Coffee</h2>
+<div class="coffee" id="coffeeIcon">☕</div>
+<h2 class="coffeeName" id="result"></h2>
+<p id="message" style="color:#ddd"></p>
+<div class="details"><div class="detail">Closest Case<br><b id="caseId"></b></div><div class="detail">Distance<br><b id="score"></b></div></div>
+</div>
+</div>
+<table><thead><tr><th>Case</th><th>Mood</th><th>Time</th><th>Coffee Type</th><th>Result</th></tr></thead><tbody id="dataset"></tbody></table>
+</div>
+<script>
+const cases=[
+{id:"C1",mood:"Tired",time:"Mid-day",type:"Strong",result:"Espresso"},
+{id:"C2",mood:"Stress",time:"Morning",type:"Light",result:"Latte"},
+{id:"C3",mood:"Happy",time:"Evening",type:"Strong",result:"Mocha"},
+{id:"C4",mood:"Sleepy",time:"Evening",type:"Strong",result:"Americano"},
+{id:"C5",mood:"Happy",time:"Morning",type:"Light",result:"Cappuccino"},
+{id:"C6",mood:"Tired",time:"Morning",type:"Strong",result:"Double Espresso"}];
+const codes={mood:{Tired:1,Stress:2,Happy:3,Sleepy:4},time:{Morning:1,"Mid-day":2,Evening:3},type:{Light:1,Strong:2}};
+const messages={Tired:"You need energy and focus.",Stress:"You need something calm and smooth.",Happy:"A sweet choice fits your mood.",Sleepy:"You need a stronger coffee boost."};
+const icons={Espresso:"☕",Latte:"🥛☕",Mocha:"🍫☕",Americano:"🖤☕",Cappuccino:"☁️☕","Double Espresso":"⚡☕"};
+function distance(input,item){return Math.abs(codes.mood[input.mood]-codes.mood[item.mood])+Math.abs(codes.time[input.time]-codes.time[item.time])+Math.abs(codes.type[input.type]-codes.type[item.type])}
+function recommend(){const input={mood:mood.value,time:time.value,type:type.value};const best=cases.map(c=>({...c,score:distance(input,c)})).sort((a,b)=>a.score-b.score)[0];result.textContent=best.result;caseId.textContent=best.id;score.textContent=best.score;message.textContent=messages[input.mood];coffeeIcon.textContent=icons[best.result]}
+dataset.innerHTML=cases.map(c=>`<tr><td>${c.id}</td><td>${c.mood}</td><td>${c.time}</td><td>${c.type}</td><td><b>${c.result}</b></td></tr>`).join("");
+recommend();
+</script>
+</body>
+</html>
